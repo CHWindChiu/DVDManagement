@@ -9,6 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using DVDManagement.Data;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity;
+using DVDManagement.Models;
 
 namespace DVDManagement
 {
@@ -24,7 +26,11 @@ namespace DVDManagement
                 try
                 {
                     var context = services.GetRequiredService<DVDMAGContext>();
-                    DbInitializer.InitializeAsync(context);
+                    var userManager = services.GetRequiredService<UserManager<Admin>>();
+                    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+                    var dbInitializerLogger = services.GetRequiredService<ILogger<DbInitializer>>();
+                    DbInitializer.InitializeAsync(context, userManager, roleManager, dbInitializerLogger).Wait();
                 }
                 catch (Exception ex)
                 {

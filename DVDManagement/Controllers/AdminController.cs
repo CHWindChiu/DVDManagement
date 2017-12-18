@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace DVDManagement.Controllers
 {
@@ -15,16 +17,58 @@ namespace DVDManagement.Controllers
     {
         private readonly DVDMAGContext _context;
 
+        private readonly UserManager<Admin> _userManager;
+        private readonly SignInManager<Admin> _signInManager;
+        private readonly ILogger _logger;
+
         public AdminController(DVDMAGContext context)
         {
             _context = context;
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public IActionResult Login()
         {
-            //取得登入的管理者資料
-            Admin admin = JsonConvert.DeserializeObject<Admin>(TempData.Peek("adminAccount") as string);
-            return View(admin);
+            return PartialView();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(AdminViewModel model, string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                // This doesn't count login failures towards account lockout
+                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                var result = await _signInManager.PasswordSignInAsync(model.Email,
+                    model.Password, true, lockoutOnFailure: false);
+                if (result.Succeeded)
+                {
+                   // _logger.LogInformation(1, "User logged in.");
+                    return RedirectToLocal(returnUrl);
+                }
+                if (result.RequiresTwoFactor)
+                {
+                    //return RedirectToAction(nameof(SendCode), new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                }
+                if (result.IsLockedOut)
+                {
+                    //_logger.LogWarning(2, "User account locked out.");
+                    return View("Lockout");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return View(model);
+                }
+            }
+
+            // If we got this far, something failed, redisplay form
+            //return View(model);
+
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
@@ -34,24 +78,53 @@ namespace DVDManagement.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public IActionResult Register([Bind("account,password")] Admin admin)
+        public async Task<IActionResult> Register(Admin model)
         {
-            /*
-            var result = await _context.Admin.SingleOrDefaultAsync(m => m.Account == adminUser.Account && m.Password == adminUser.Password);
+            //if (ModelState.IsValid)
+            //{
+            //    var user = new Admin { account = model.account, name = model.name, email = model.Email, phone = model.phone  };
+            //    var result = await _userManager.CreateAsync(user, model.password);
+            //    if (result.Succeeded)
+            //    {
+            //        // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
+            //        // Send an email with this link
+            //        //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            //        //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+            //        //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
+            //        //    "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
+            //        await _signInManager.SignInAsync(user, isPersistent: false);
+            //        //_logger.LogInformation(3, "User created a new account with password.");
+            //        return RedirectToAction(nameof(HomeController.Index), "Home");
+            //    }
+            //    AddErrors(result);
+            //}
 
-            if (result != null)
+            //// If we got this far, something failed, redisplay form
+            //return View(model);
+            return View();
+        }
+
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
             {
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError(string.Empty, error.Description);
             }
-            */
-
-            return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Error()
+        private IActionResult RedirectToLocal(string returnUrl)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
         }
+
     }
 }

@@ -36,15 +36,15 @@ namespace DVDManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LoginAsync([Bind("account,password")] Admin admin)
         {
-            var result = await _context.Admin.SingleOrDefaultAsync(m => m.account == admin.account && m.password == admin.password);
+            //var result = await _context.Admin.SingleOrDefaultAsync(m => m.account == admin.account && m.password == admin.password);
             
-            if (result != null)
-            {
-                string adminAccountStr = JsonConvert.SerializeObject(result);
-                TempData["menu"] = Menu.Area.Home.ToString();
-                TempData["adminAccount"] = adminAccountStr;
-                return RedirectToAction(nameof(Index));
-            }
+            //if (result != null)
+            //{
+            //    string adminAccountStr = JsonConvert.SerializeObject(result);
+            //    TempData["menu"] = Menu.Area.Home.ToString();
+            //    TempData["adminAccount"] = adminAccountStr;
+            //    return RedirectToAction(nameof(Index));
+            //}
 
             return RedirectToAction(nameof(Index));
         }

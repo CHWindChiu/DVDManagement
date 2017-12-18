@@ -11,8 +11,8 @@ using System;
 namespace DVDManagement.Migrations
 {
     [DbContext(typeof(DVDMAGContext))]
-    [Migration("20171211132023_Initial")]
-    partial class Initial
+    [Migration("20171217103453_201712171834")]
+    partial class _201712171834
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,31 +23,41 @@ namespace DVDManagement.Migrations
 
             modelBuilder.Entity("DVDManagement.Models.Admin", b =>
                 {
-                    b.Property<string>("account")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(10);
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<string>("email")
-                        .IsRequired()
-                        .HasMaxLength(254);
+                    b.Property<int>("AccessFailedCount");
 
-                    b.Property<string>("name")
-                        .IsRequired()
-                        .HasMaxLength(15);
+                    b.Property<string>("Address")
+                        .HasMaxLength(100);
 
-                    b.Property<string>("password")
-                        .IsRequired()
-                        .HasMaxLength(20);
+                    b.Property<string>("ConcurrencyStamp");
 
-                    b.Property<string>("permission")
-                        .IsRequired()
-                        .HasMaxLength(20);
+                    b.Property<string>("Email");
 
-                    b.Property<string>("phone")
-                        .IsRequired()
-                        .HasMaxLength(10);
+                    b.Property<bool>("EmailConfirmed");
 
-                    b.HasKey("account");
+                    b.Property<bool>("LockoutEnabled");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("NormalizedEmail");
+
+                    b.Property<string>("NormalizedUserName");
+
+                    b.Property<string>("PasswordHash");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("SecurityStamp");
+
+                    b.Property<bool>("TwoFactorEnabled");
+
+                    b.Property<string>("UserName");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Admin");
                 });

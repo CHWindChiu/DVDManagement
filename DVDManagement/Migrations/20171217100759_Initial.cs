@@ -12,16 +12,26 @@ namespace DVDManagement.Migrations
                 name: "Admin",
                 columns: table => new
                 {
-                    account = table.Column<string>(maxLength: 10, nullable: false),
-                    email = table.Column<string>(maxLength: 254, nullable: false),
-                    name = table.Column<string>(maxLength: 15, nullable: false),
-                    password = table.Column<string>(maxLength: 20, nullable: false),
-                    permission = table.Column<string>(maxLength: 20, nullable: false),
-                    phone = table.Column<string>(maxLength: 10, nullable: false)
+                    Id = table.Column<string>(nullable: false),
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    Address = table.Column<string>(maxLength: 100, nullable: false),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    EmailConfirmed = table.Column<bool>(nullable: false),
+                    LockoutEnabled = table.Column<bool>(nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
+                    NormalizedEmail = table.Column<string>(nullable: true),
+                    NormalizedUserName = table.Column<string>(nullable: true),
+                    PasswordHash = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    SecurityStamp = table.Column<string>(nullable: true),
+                    TwoFactorEnabled = table.Column<bool>(nullable: false),
+                    UserName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Admin", x => x.account);
+                    table.PrimaryKey("PK_Admin", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
