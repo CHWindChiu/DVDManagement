@@ -9,44 +9,31 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Identity;
 
 namespace DVDManagement.Controllers
 {
     public class HomeController : Controller
     {
         private readonly DVDMAGContext _context;
+        private readonly UserManager<Admin> _userManager;
+        private readonly SignInManager<Admin> _signInManager;
 
-        public HomeController(DVDMAGContext context)
+        public HomeController(
+            DVDMAGContext context,
+            UserManager<Admin> userManager,
+            SignInManager<Admin> signInManager
+            )
         {
             _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult Login()
-        {
-            return PartialView();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LoginAsync([Bind("account,password")] Admin admin)
-        {
-            //var result = await _context.Admin.SingleOrDefaultAsync(m => m.account == admin.account && m.password == admin.password);
-            
-            //if (result != null)
-            //{
-            //    string adminAccountStr = JsonConvert.SerializeObject(result);
-            //    TempData["menu"] = Menu.Area.Home.ToString();
-            //    TempData["adminAccount"] = adminAccountStr;
-            //    return RedirectToAction(nameof(Index));
-            //}
-
-            return RedirectToAction(nameof(Index));
+            var userInfo = await _userManager.GetUserAsync(HttpContext.User);
+            return View(userInfo);
         }
 
         public IActionResult Error()

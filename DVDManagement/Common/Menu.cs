@@ -9,20 +9,11 @@ namespace DVDManagement.Common
     {
         public enum Area
         {
-            Home,
             Admin,
             User,
             Movie,
             Statistics
         }
-
-        private static string[,] homeItemArray = new string[,]
-        {
-            { "管理者", "Admin", "Index" },
-            { "使用者", "User", "Index" },
-            { "影片", "Movie", "Index" },
-            { "統計分析", "Statistics", "Index" }
-        };
 
         private static string[,] adminItemArray = new string[,]
         {
@@ -42,13 +33,30 @@ namespace DVDManagement.Common
             { "電影查詢", "Movie", "Details" }
         };
 
+        public static string[] GetTitleItem(Area area)
+        {
+            switch (area)
+            {
+                case Area.Admin:
+                    return new string[] { "管理者", "Home", "Index" };
+
+                case Area.User:
+                    return new string[] { "使用者", "User", "Details" };
+
+                case Area.Movie:
+                    return new string[] { "影片", "Movie", "Details" };
+
+                case Area.Statistics:
+                    return new string[] { "統計分析", "Statistics", "Index" };
+            }
+
+            return null;
+        }
+
         public static string[,] GetMenuItem(Area area)
         {
             switch (area)
             {
-                case Area.Home:
-                    return homeItemArray;
-
                 case Area.Admin:
                     return adminItemArray;
 
@@ -58,9 +66,12 @@ namespace DVDManagement.Common
                 case Area.Movie:
                     return movieItemArray;
 
-                default:
-                    return homeItemArray;
+                case Area.Statistics:
+                    return movieItemArray;
+
             }
+
+            return null;
         }
     }
 }

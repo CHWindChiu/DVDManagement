@@ -1,9 +1,10 @@
 ﻿using DVDManagement.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DVDManagement.Data
 {
-    public class DVDMAGContext : DbContext
+    public class DVDMAGContext : IdentityDbContext<Admin>
     {
         public DVDMAGContext(DbContextOptions<DVDMAGContext> options) : base(options)
         {

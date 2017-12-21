@@ -36,14 +36,13 @@ namespace DVDManagement
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings
-                /*
-                options.Password.RequireDigit = true;
-                options.Password.RequiredLength = 8;
+                
+                //options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 4;
                 options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = true;
+                options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
-                options.Password.RequiredUniqueChars = 6;
-                */
+                //options.Password.RequiredUniqueChars = 6;
 
                 // Lockout settings
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
