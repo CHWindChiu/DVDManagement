@@ -70,47 +70,31 @@
                     </tbody>
                 </table>
 
-                @{
-                    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-                    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-                }
-
-                <a asp-action="Details"
-                   asp-route-sortOrder="@ViewData["CurrentSort"]"
-                   asp-route-page="@(Model.PageIndex - 1)"
-                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                   class="btn btn-default @prevDisabled">
-                    前一頁
-                </a>
-                <a asp-action="Details"
-                   asp-route-sortOrder="@ViewData["CurrentSort"]"
-                   asp-route-page="@(Model.PageIndex + 1)"
-                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                   class="btn btn-default @nextDisabled">
-                    後一頁
-                </a>
+                @await Html.PartialAsync("_PaginatedListPartial", Model)
 
             </div>
         </div>
     </div>
 </div>
 
-@section scripts {
+@section scripts
+                {
     <script>
         $(document).ready(function (e) {
-            var searchParam = $("#searchParam").val()
-            if (searchParam != "") {
-                var concept = searchParam;
+                        var searchParam = $("#searchParam").val()
+            if (searchParam != "")
+                        {
+                            var concept = searchParam;
                 $('.search-panel span#searchConcept').text(concept);
                 $('.input-group #searchParam').val(concept);
-            }
+                        }
 
-            $('.search-panel .dropdown-menu').find('a').click(function (e) {
-                e.preventDefault();
-                var concept = $(this).text();
+            $('.search-panel .dropdown-menu').find('a').click(function(e) {
+                            e.preventDefault();
+                            var concept = $(this).text();
                 $('.search-panel span#searchConcept').text(concept);
                 $('.input-group #searchParam').val(concept);
-            });
-        });
+                        });
+                    });
     </script>
 }

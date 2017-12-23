@@ -151,7 +151,7 @@ namespace DVDManagement.Controllers
                 //    "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
                 //await _signInManager.SignInAsync(user, isPersistent: false);
                 //_logger.LogInformation(3, "User created a new account with password.");
-                return RedirectToAction(nameof(AdminController), "Index");
+                return RedirectToAction("Index");
             }
 
             AddErrors(result);
@@ -187,22 +187,22 @@ namespace DVDManagement.Controllers
             ViewData["CurrentFilter"] = searchString;
             var allAdmins = _userManager.Users;
             IQueryable<Admin> admins;
-            //var admins = _userManager.FindByNameAsync();
+            
             if (!String.IsNullOrEmpty(searchString))
             {
                 switch(searchParam)
                 {
                     default:
-                        admins = allAdmins.Where(s => s.UserName.Contains(searchString));
+                        admins = allAdmins.Where(s => s.UserName.Equals(searchString));
                         break;
                     case "帳號":
-                        admins = allAdmins.Where(s => s.UserName.Contains(searchString));
+                        admins = allAdmins.Where(s => s.UserName.Equals(searchString));
                         break;
                     case "Email":
-                        admins = allAdmins.Where(s => s.Email.Contains(searchString));
+                        admins = allAdmins.Where(s => s.Email.Equals(searchString));
                         break;
                     case "電話":
-                        admins = allAdmins.Where(s => s.PhoneNumber.Contains(searchString));
+                        admins = allAdmins.Where(s => s.PhoneNumber.Equals(searchString));
                         break;
                 }
             }
@@ -235,7 +235,7 @@ namespace DVDManagement.Controllers
             //}
 
             //每頁資料筆數
-            int pageSize = 2;
+            int pageSize = 1;
             return View(await PaginatedList<Admin>.CreateAsync(admins.AsNoTracking(), page ?? 1, pageSize));
         }
 

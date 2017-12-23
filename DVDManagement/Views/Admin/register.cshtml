@@ -6,11 +6,11 @@
 
 <div class="card">
     <div class="card-body">
-        <form asp-action="register" enctype="multipart/form-data" class="form-horizontal form-material">
+        <form asp-action="register" asp-controller="admin" enctype="multipart/form-data" class="form-horizontal form-material">
             <div class="form-group">
                 <label class="col-md-12">選擇相片:</label>
                 <div class="col-md-12">
-                    <input id="input-b1" name="avatarImage" type="file" accept=".jpg,.png" class="file">
+                    <input id="input-b3" name="avatarImage" data-show-upload="false" type="file" accept=".jpg,.png" class="file">
                 </div>
             </div>
             <div class="form-group">
