@@ -19,7 +19,7 @@ using System.Linq;
 
 namespace DVDManagement.Controllers
 {
-    public class AdminController : Controller
+    public class UserController : Controller
     {
         private readonly DVDMAGContext _context;
 
@@ -28,16 +28,9 @@ namespace DVDManagement.Controllers
         private readonly ILogger _logger;
         private IHostingEnvironment _hostingEnvironment;
 
-        public AdminController(
-            DVDMAGContext context,
-            UserManager<Admin> userManager,
-            SignInManager<Admin> signInManager,
-            IHostingEnvironment environment)
+        public UserController(DVDMAGContext context)
         {
             _context = context;
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _hostingEnvironment = environment;
         }
 
         public async Task<IActionResult> Index()
@@ -55,7 +48,6 @@ namespace DVDManagement.Controllers
             };
             return View(model);
         }
-
 
         [HttpPost]
         [AllowAnonymous]
@@ -195,7 +187,6 @@ namespace DVDManagement.Controllers
             {
                 ViewData["CurrentFilterType"] = searchParam;
             }
-
             //ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             //ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 

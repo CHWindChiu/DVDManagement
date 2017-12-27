@@ -1,4 +1,4 @@
-﻿@model DVDManagement.Models.Admin
+﻿@model DVDManagement.Models.AdminViewModel.InfoViewModel
 
 <div class="container">
     <div class="row">
@@ -8,8 +8,8 @@
             <div class="card">
                 <div class="card-body">
                     <center class="m-t-30">
-                        <img src="@Url.Content($"~/images/AvatarImage/{Model.UserName}.jpg")" class="img-circle" width="150" />
-                        <h4 class="card-title m-t-10">@Model.UserName</h4>
+                        <img src="@Url.Content($"~/images/AvatarImage/{Model.adminModel.UserName}.jpg")" class="img-circle" width="150" />
+                        <h4 class="card-title m-t-10">@Model.adminModel.UserName</h4>
                         <h6 class="card-subtitle">Accoubts Manager Amix corp</h6>
                     </center>
                 </div>
@@ -20,41 +20,146 @@
         <div class="col-md-7">
             <div class="card">
                 <div class="card-body">
-                    <form class="form-horizontal form-material">
+                    <form id="modifyForm" asp-action="Modify" asp-controller="admin" method="post" class="form-horizontal form-material">
+                        <div asp-validation-summary="All" class="text-danger"></div>
                         <div class="form-group">
-                            <label class="col-md-12">姓名</label>
-                            <div class="col-md-12">
-                                <input type="text" value="@Model.UserName" class="form-control form-control-line">
-                            </div>
+                            <label asp-for="UserName" class="form-control-label"></label> : @Html.DisplayFor(m => m.adminModel.UserName)
+                            <input id="userNameHidden" type="hidden" asp-for="adminModel.UserName" value="@Model.adminModel.UserName">
                         </div>
                         <div class="form-group">
-                            <label for="example-email" class="col-md-12">Email</label>
-                            <div class="col-md-12">
-                                <input type="email" value="@Model.Email" class="form-control form-control-line" name="example-email" id="example-email">
-                            </div>
+                            <label asp-for="Email" class="form-control-label"></label> : 
+                            <input type="email" asp-for="Email" value="@Model.adminModel.Email" class="form-control form-control-line">
+                            <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-12">電話號碼</label>
-                            <div class="col-md-12">
-                                <input type="text" value="@Model.PhoneNumber" class="form-control form-control-line">
-                            </div>
+                            <label asp-for="PhoneNumber" class="form-control-label"></label> : 
+                            <input type="text" asp-for="PhoneNumber" value="@Model.adminModel.PhoneNumber" class="form-control form-control-line">
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-12">地址</label>
-                            <div class="col-md-12">
-                                <input type="text" value="@Model.Address" class="form-control form-control-line">
-                            </div>
+                            <label asp-for="Address" class="form-control-label"></label> : 
+                            <input type="text" asp-for="Address" value="@Model.adminModel.Address" class="form-control form-control-line">
+                            <span asp-validation-for="Address" class="text-danger"></span>
                         </div>
+
                         <div class="form-group">
-                            <div class="col-sm-12">
-                                <button class="btn btn-success">更新</button>
-                                <button class="btn btn-success">刪除</button>
-                            </div>
+                            <button id="modifydBtn" type="button" class="btn btn-success">更新</button>
+                            <button class="btn btn-success">刪除</button>
+                        </div>
+
+                        <div class="form-group">
+                            <a href="#" id="changePasswordPopUpBtn" class="btn btn-lg btn-success" data-toggle="modal" data-target="#changePasswordPopUp">更改密碼</a>
                         </div>
                     </form>
+                    <div class="modal fade" id="changePasswordPopUp" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">更改密碼</h5>
+                                </div>
+                                <form id="changePasswordForm"  asp-action="ResetPassword" asp-controller="admin" method="post" >
+                                    <div asp-validation-summary="All" class="text-danger"></div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label asp-for="changePasswordViewModel.OldPassword" class="form-control-label"></label> :
+                                            <input asp-for="changePasswordViewModel.OldPassword" type="password" class="form-control form-control-line">
+                                            <span asp-validation-for="changePasswordViewModel.OldPassword" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="changePasswordViewModel.NewPassword" class="form-control-label"></label> :
+                                            <input asp-for="changePasswordViewModel.NewPassword" type="password" class="form-control form-control-line">
+                                            <span asp-validation-for="changePasswordViewModel.NewPassword" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="changePasswordViewModel.ConfirmPassword" class="form-control-label"></label> :
+                                            <input asp-for="changePasswordViewModel.ConfirmPassword" type="password" class="form-control form-control-line">
+                                            <span asp-validation-for="changePasswordViewModel.ConfirmPassword" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                                        <button id="changePasswordBtn" type="button" class="btn btn-primary">儲存更變</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
 
     </div>
 </div>
+
+@section scripts
+{
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script>
+        $(document).ready(function (e) {
+            $("#modifydBtn").click(function () {
+                var url = "@Url.Action("Modify", "admin")";
+                $.ajax(url,
+                {
+                    type: 'post',
+                    data: $("#modifyForm").serialize(),
+                    async: false,
+                    success: function (data) {
+                        alert(data);
+                    },
+                    error: function (jqXHR, exception) {
+                        var msg = '';
+                        if (jqXHR.status === 0) {
+                            msg = 'Not connect.\n Verify Network.';
+                        } else if (jqXHR.status == 404) {
+                            msg = 'Requested page not found. [404]';
+                        } else if (jqXHR.status == 500) {
+                            msg = 'Internal Server Error [500].';
+                        } else if (exception === 'parsererror') {
+                            msg = 'Requested JSON parse failed.';
+                        } else if (exception === 'timeout') {
+                            msg = 'Time out error.';
+                        } else if (exception === 'abort') {
+                            msg = 'Ajax request aborted.';
+                        } else {
+                            msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                        }
+                        alert(msg);
+                    },
+                });
+            })
+
+            $("#changePasswordBtn").click(function () {
+                var url = "@Url.Action("ResetPassword", "admin")";
+                $.ajax(url,
+                {
+                        type: 'post',
+                        data: $("#changePasswordForm").serialize(),
+                    async: false,
+                    success: function (data) {
+                        alert(data);
+                    },
+                    error: function (jqXHR, exception) {
+                        var msg = '';
+                        if (jqXHR.status === 0) {
+                            msg = 'Not connect.\n Verify Network.';
+                        } else if (jqXHR.status == 404) {
+                            msg = 'Requested page not found. [404]';
+                        } else if (jqXHR.status == 500) {
+                            msg = 'Internal Server Error [500].';
+                        } else if (exception === 'parsererror') {
+                            msg = 'Requested JSON parse failed.';
+                        } else if (exception === 'timeout') {
+                            msg = 'Time out error.';
+                        } else if (exception === 'abort') {
+                            msg = 'Ajax request aborted.';
+                        } else {
+                            msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                        }
+                        alert(msg);
+                    },
+                });
+            })
+        });
+    </script>
+}

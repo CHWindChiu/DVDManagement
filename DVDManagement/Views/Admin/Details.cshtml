@@ -1,57 +1,64 @@
 ﻿@model DVDManagement.Common.PaginatedList<DVDManagement.Models.Admin>
 
-<div class="card col-md-8">
-    <form asp-action="Details" method="get">
-        <div class="card">
-            <div class="card-body">
-                <div class="input-group">
-                    <div class="input-group-btn search-panel">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                            <span id="searchConcept">搜尋方式</span> <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a>帳號</a></li>
-                            <li><a>Email</a></li>
-                            <li><a>電話</a></li>
-                        </ul>
-                    </div>
+    <div class="card col-md-8">
+        <form asp-action="Details" method="get">
+            <div class="card">
+                <div class="card-body">
+                    <div class="input-group">
+                        <div class="input-group-btn search-panel">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span id="searchConcept">搜尋方式</span> <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a>帳號</a></li>
+                                <li><a>Email</a></li>
+                                <li><a>電話</a></li>
+                            </ul>
+                        </div>
 
-                    <!-- 搜尋方式參數 -->
-                    <input type="hidden" name="searchParam" value="@ViewData["CurrentFilterType"]" id="searchParam">
-                    <input type="text" class="form-control" name="searchString" placeholder="搜尋內容" value="@ViewData["currentFilter"]">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-                    </span>
+                        <!-- 搜尋方式參數 -->
+                        <input type="hidden" name="searchParam" value="@ViewData[" CurrentFilterType"]" id="searchParam">
+                        <input type="text" class="form-control" name="searchString" placeholder="搜尋內容" value="@ViewData[" currentFilter"]">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                        </span>
+                    </div>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
 
-    <div>
-        <div class="card-body">
-            <div class="table-responsive">
+        <div>
+            <div class="card-body">
+                <div class="table-responsive">
 
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model[0].UserName)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model[0].Email)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model[0].PhoneNumber)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model[0].Address)
-                            </th>
-                        </tr>
-                    </thead>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model[0].UserName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model[0].Email)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model[0].PhoneNumber)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model[0].Address)
+                                </th>
+                            </tr>
+                        </thead>
 
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
+                        <tbody>
+                            @if(Model.Count() == 0) {
+                                <tr>
+                                    <td colspan="4">
+                                        查詢不到資料
+                                    </td>
+                                </tr>
+                            }
+                            @foreach (var item in Model)
+                            {
                             <tr>
                                 <td>
                                     <a asp-action="Info" asp-route-userName="@item.UserName">@Html.DisplayFor(modelItem => item.UserName)</a>
@@ -66,19 +73,19 @@
                                     @Html.DisplayFor(modelItem => item.Address)
                                 </td>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                            }
+                        </tbody>
+                    </table>
 
-                @await Html.PartialAsync("_PaginatedListPartial", Model)
+                    @await Html.PartialAsync("_PaginatedListPartial", Model)
 
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-@section scripts
-                {
+    @section scripts
+    {
     <script>
         $(document).ready(function (e) {
                         var searchParam = $("#searchParam").val()
@@ -97,4 +104,4 @@
                         });
                     });
     </script>
-}
+    }

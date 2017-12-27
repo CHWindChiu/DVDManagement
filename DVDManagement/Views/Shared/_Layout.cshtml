@@ -8,147 +8,84 @@
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/dashboard.css" />
+    <link rel="stylesheet" href="~/css/menu.css" />
     @RenderSection("Styles", false)
-
-    <style>
-        body, html {
-            height: 100%;
-        }
-
-        nav.sidebar, .main {
-            -webkit-transition: margin 200ms ease-out;
-            -moz-transition: margin 200ms ease-out;
-            -o-transition: margin 200ms ease-out;
-            transition: margin 200ms ease-out;
-        }
-
-        .main {
-            padding: 10px 10px 0 10px;
-            position: absolute;
-            width: calc(100% - 40px);
-            margin-left: 40px;
-            float: right;
-        }
-
-        nav.sidebar:hover + .main {
-            margin-left: 200px;
-        }
-
-        nav.sidebar.navbar.sidebar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
-            margin-left: 0px;
-        }
-
-        nav.sidebar .navbar-brand, nav.sidebar .navbar-header {
-            text-align: center;
-            width: 100%;
-            margin-left: 0px;
-        }
-
-        nav.sidebar a {
-            padding-right: 13px;
-        }
-
-        nav.sidebar .navbar-nav > li:first-child {
-            border-top: 1px #e5e5e5 solid;
-        }
-
-        nav.sidebar .navbar-nav > li {
-            border-bottom: 1px #e5e5e5 solid;
-        }
-
-        nav.sidebar .navbar-nav .open .dropdown-menu {
-            position: static;
-            float: none;
-            width: auto;
-            margin-top: 0;
-            background-color: transparent;
-            border: 0;
-            -webkit-box-shadow: none;
-            box-shadow: none;
-        }
-
-        nav.sidebar .navbar-collapse, nav.sidebar .container-fluid {
-            padding: 0 0px 0 0px;
-        }
-
-        .navbar-inverse .navbar-nav .open .dropdown-menu > li > a {
-            color: #777;
-        }
-
-        nav.sidebar {
-            width: 200px;
-            height: 100%;
-            margin-left: -160px;
-            float: left;
-            margin-bottom: 0px;
-        }
-
-        nav.sidebar li {
-            width: 100%;
-        }
-
-        nav.sidebar:hover {
-            margin-left: 0px;
-        }
-
-        .forAnimate {
-            opacity: 0;
-        }
-    </style>
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-2">
+    <div class="side-menu">
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="navbar-header">
+                <div class="brand-wrapper">
 
-                <nav class="navbar navbar-default sidebar">
-                    <div class="container-fluid">
-                        <div class="navbar-header">
-                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-sidebar-navbar-collapse-1">
-                                <span class="sr-only">Toggle navigation</span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </button>
-                        </div>
-                        <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
-                            <ul class="nav navbar-nav">
-                                @{
-                                    @using DVDManagement.Common;
-                                }
-                                <li class="active dropdown">
-                                    @foreach (Menu.Area area in Enum.GetValues(typeof(Menu.Area)))
-                                    {
-                                        string[] titleList = Menu.GetTitleItem(area);
-                                        string[,] menuList = Menu.GetMenuItem(area);
-                                        <a class="dropdown-toggle" data-toggle="dropdown" asp-controller="@titleList[1]" asp-action="@titleList[2]">@titleList[0]<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-home"></span></a>
-                                        <ul class="dropdown-menu">
-                                            @for (int i = 0; i < menuList.GetLength(0); i++)
-                                            {
-                                                <li><a asp-controller="@menuList[i, 1]" asp-action="@menuList[i, 2]">@menuList[i, 0]</a></li>
-                                            }
-                                        </ul>
-                                    }
-                                </li>
-                            </ul>
+                    <button type="button" class="navbar-toggle">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                    <div class="brand-name-wrapper">
+                        <a class="navbar-brand" href="#">
+                            Brand
+                        </a>
+                    </div>
+
+                    <a data-toggle="collapse" href="#search" class="btn btn-default" id="search-trigger">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </a>
+
+                    <div id="search" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <form class="navbar-form" role="search">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Search">
+                                </div>
+                                <button type="submit" class="btn btn-default "><span class="glyphicon glyphicon-ok"></span></button>
+                            </form>
                         </div>
                     </div>
-                </nav>
-
+                </div>
             </div>
 
-            <div class="col-md-10">
-                @RenderBody()
+            <div class="side-menu-container">
+                <ul class="nav navbar-nav">
+                    @{
+                        @using DVDManagement.Common;
+                    }
+                    @foreach (Menu.Area area in Enum.GetValues(typeof(Menu.Area)))
+                    {
+                        string[] titleList = Menu.GetTitleItem(area);
+                        string[,] menuList = Menu.GetMenuItem(area);
+                        <li class="panel panel-default" id="dropdown">
+                            <a data-toggle="collapse" href="#@titleList[0]">
+                                <span class="glyphicon glyphicon-user"></span>@titleList[0]<span class="caret"></span>
+                            </a>
+                            <div id="@titleList[0]" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul class="nav navbar-nav">
+                                        @for (int i = 0; i < menuList.GetLength(0); i++)
+                                        {
+                                            <li><a asp-controller="@menuList[i, 1]" asp-action="@menuList[i, 2]">@menuList[i, 0]</a></li>
+                                        }
+                                    </ul>
+                                </div>
+                             </div>
+                        </li>
+                    }
+                </ul>
             </div>
+        </nav>
+    </div>
+
+    <div class="container-fluid">
+        <div class="side-body">
+            @RenderBody()
         </div>
     </div>
 
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-
-
-
     @RenderSection("Scripts", required: false)
 </body>
 

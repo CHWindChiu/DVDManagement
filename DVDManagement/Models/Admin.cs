@@ -7,16 +7,11 @@ namespace DVDManagement.Models
 {
     public class Admin : IdentityUser
     {
-        [DisplayName("帳號")]
-        [MaxLength(50)]
+        [Key]
         public override string UserName { get; set; }
 
-        [DisplayName("電話號碼")]
-        [MaxLength(10)]
-        public override string PhoneNumber { get; set; }
-
-        [DisplayName("地址")]
         [MaxLength(100)]
+        [Display(Name = "地址")]
         public string Address { get; set; }
     }
 }
