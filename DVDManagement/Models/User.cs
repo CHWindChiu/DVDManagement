@@ -1,5 +1,7 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DVDManagement.Models
 {
@@ -7,42 +9,40 @@ namespace DVDManagement.Models
     {
         [Key]
         [Required]
-        [StringLength(10)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [DisplayName("使用者代號")]
-        public string user_no { get; set; }
+        public long User_no { get; set; }
 
         [Required]
         [MaxLength(15)]
         [DisplayName("名稱")]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         [Required]
         [DisplayName("性別")]
-        public bool sex { get; set; }
+        public bool Sex { get; set; }
 
         [Required]
-        [Range(0,99999999)]
+        [DataType(DataType.Date)]
         [DisplayName("生日")]
-        public byte birthday { get; set; }
+        public DateTime Birthday { get; set; }
 
         [Required]
-        [MaxLength(254)]
-        [EmailAddress]
         [DisplayName("Email")]
-        public string email { get; set; }
+        public string Email { get; set; }
 
         [Required]
         [MaxLength(10)]
         [DisplayName("連絡電話1")]
-        public string phone_1 { get; set; }
+        public string Phone_1 { get; set; }
 
         [MaxLength(10)]
         [DisplayName("連絡電話2")]
-        public string phone_2 { get; set; }
+        public string Phone_2 { get; set; }
 
         [Required]
         [Range(0, 999999)]
         [DisplayName("儲值金額")]
-        public int store_amount { get; set; }
+        public int Store_amount { get; set; }
     }
 }

@@ -13,16 +13,16 @@ namespace DVDManagement.Models
         [Required]
         [StringLength(10)]
         [DisplayName("影片代碼")]
-        public string movie_code { get; set; }
+        public string Movie_code { get; set; }
 
         [Required]
         [Range(0, 1)]
         [DisplayName("狀態")]
         // 0:租借中 1:未租借
-        public byte type { get; set; }
+        public byte Type { get; set; }
 
         [StringLength(10)]
         [DisplayName("租借人代號")]
-        public string user_no { get; set; }
+        public string User_no { get; set; }
     }
 }

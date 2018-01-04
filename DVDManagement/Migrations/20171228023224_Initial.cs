@@ -38,79 +38,81 @@ namespace DVDManagement.Migrations
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
                     PasswordHash = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(maxLength: 10, nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
                     SecurityStamp = table.Column<string>(nullable: true),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    UserName = table.Column<string>(maxLength: 256, nullable: true)
+                    UserName = table.Column<string>(maxLength: 256, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.UniqueConstraint("AK_AspNetUsers_UserName", x => x.UserName);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Dvd_info",
                 columns: table => new
                 {
-                    movie_code = table.Column<string>(maxLength: 10, nullable: false),
-                    create_date = table.Column<DateTime>(nullable: false),
-                    name = table.Column<string>(maxLength: 15, nullable: false),
-                    overdue = table.Column<int>(nullable: false),
-                    rent = table.Column<int>(nullable: false),
-                    time_limit = table.Column<byte>(nullable: false),
-                    type = table.Column<byte>(nullable: false),
-                    update_date = table.Column<DateTime>(nullable: false)
+                    Movie_code = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Create_date = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(maxLength: 15, nullable: false),
+                    Overdue = table.Column<int>(nullable: false),
+                    Rent = table.Column<int>(nullable: false),
+                    Time_limit = table.Column<byte>(nullable: false),
+                    Type = table.Column<byte>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Dvd_info", x => x.movie_code);
+                    table.PrimaryKey("PK_Dvd_info", x => x.Movie_code);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Dvd_recode",
                 columns: table => new
                 {
-                    movie_code = table.Column<string>(maxLength: 10, nullable: false),
-                    type = table.Column<byte>(nullable: false),
-                    user_no = table.Column<string>(maxLength: 10, nullable: true)
+                    Movie_code = table.Column<string>(maxLength: 10, nullable: false),
+                    Type = table.Column<byte>(nullable: false),
+                    User_no = table.Column<string>(maxLength: 10, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Dvd_recode", x => x.movie_code);
+                    table.PrimaryKey("PK_Dvd_recode", x => x.Movie_code);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Transaction",
                 columns: table => new
                 {
-                    user_no = table.Column<string>(maxLength: 10, nullable: false),
-                    add_amount = table.Column<int>(nullable: false),
-                    movie_code = table.Column<string>(maxLength: 10, nullable: true),
-                    trans_date = table.Column<DateTime>(nullable: false),
-                    type = table.Column<byte>(nullable: false)
+                    User_no = table.Column<string>(maxLength: 10, nullable: false),
+                    Add_amount = table.Column<int>(nullable: false),
+                    Movie_code = table.Column<string>(maxLength: 10, nullable: true),
+                    Trans_date = table.Column<DateTime>(nullable: false),
+                    Type = table.Column<byte>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Transaction", x => x.user_no);
+                    table.PrimaryKey("PK_Transaction", x => x.User_no);
                 });
 
             migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
-                    user_no = table.Column<string>(maxLength: 10, nullable: false),
-                    birthday = table.Column<byte>(nullable: false),
-                    email = table.Column<string>(maxLength: 254, nullable: false),
-                    name = table.Column<string>(maxLength: 15, nullable: false),
-                    phone_1 = table.Column<string>(maxLength: 10, nullable: false),
-                    phone_2 = table.Column<string>(maxLength: 10, nullable: true),
-                    sex = table.Column<bool>(nullable: false),
-                    store_amount = table.Column<int>(nullable: false)
+                    User_no = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Birthday = table.Column<DateTime>(nullable: false),
+                    Email = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(maxLength: 15, nullable: false),
+                    Phone_1 = table.Column<string>(maxLength: 10, nullable: false),
+                    Phone_2 = table.Column<string>(maxLength: 10, nullable: true),
+                    Sex = table.Column<bool>(nullable: false),
+                    Store_amount = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.user_no);
+                    table.PrimaryKey("PK_User", x => x.User_no);
                 });
 
             migrationBuilder.CreateTable(

@@ -11,7 +11,7 @@ using System;
 namespace DVDManagement.Migrations
 {
     [DbContext(typeof(DVDMAGContext))]
-    [Migration("20171220124711_Initial")]
+    [Migration("20171228023224_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,8 +51,7 @@ namespace DVDManagement.Migrations
 
                     b.Property<string>("PasswordHash");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasMaxLength(10);
+                    b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
@@ -61,9 +60,12 @@ namespace DVDManagement.Migrations
                     b.Property<bool>("TwoFactorEnabled");
 
                     b.Property<string>("UserName")
+                        .IsRequired()
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("UserName");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -78,95 +80,90 @@ namespace DVDManagement.Migrations
 
             modelBuilder.Entity("DVDManagement.Models.Dvd_info", b =>
                 {
-                    b.Property<string>("movie_code")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(10);
+                    b.Property<long>("Movie_code")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("create_date");
+                    b.Property<DateTime>("Create_date");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(15);
 
-                    b.Property<int>("overdue");
+                    b.Property<int>("Overdue");
 
-                    b.Property<int>("rent");
+                    b.Property<int>("Rent");
 
-                    b.Property<byte>("time_limit");
+                    b.Property<byte>("Time_limit");
 
-                    b.Property<byte>("type");
+                    b.Property<byte>("Type");
 
-                    b.Property<DateTime>("update_date");
-
-                    b.HasKey("movie_code");
+                    b.HasKey("Movie_code");
 
                     b.ToTable("Dvd_info");
                 });
 
             modelBuilder.Entity("DVDManagement.Models.Dvd_recode", b =>
                 {
-                    b.Property<string>("movie_code")
+                    b.Property<string>("Movie_code")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(10);
 
-                    b.Property<byte>("type");
+                    b.Property<byte>("Type");
 
-                    b.Property<string>("user_no")
+                    b.Property<string>("User_no")
                         .HasMaxLength(10);
 
-                    b.HasKey("movie_code");
+                    b.HasKey("Movie_code");
 
                     b.ToTable("Dvd_recode");
                 });
 
             modelBuilder.Entity("DVDManagement.Models.Transaction", b =>
                 {
-                    b.Property<string>("user_no")
+                    b.Property<string>("User_no")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(10);
 
-                    b.Property<int>("add_amount");
+                    b.Property<int>("Add_amount");
 
-                    b.Property<string>("movie_code")
+                    b.Property<string>("Movie_code")
                         .HasMaxLength(10);
 
-                    b.Property<DateTime>("trans_date");
+                    b.Property<DateTime>("Trans_date");
 
-                    b.Property<byte>("type");
+                    b.Property<byte>("Type");
 
-                    b.HasKey("user_no");
+                    b.HasKey("User_no");
 
                     b.ToTable("Transaction");
                 });
 
             modelBuilder.Entity("DVDManagement.Models.User", b =>
                 {
-                    b.Property<string>("user_no")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(10);
+                    b.Property<long>("User_no")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<byte>("birthday");
+                    b.Property<DateTime>("Birthday");
 
-                    b.Property<string>("email")
-                        .IsRequired()
-                        .HasMaxLength(254);
+                    b.Property<string>("Email")
+                        .IsRequired();
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(15);
 
-                    b.Property<string>("phone_1")
+                    b.Property<string>("Phone_1")
                         .IsRequired()
                         .HasMaxLength(10);
 
-                    b.Property<string>("phone_2")
+                    b.Property<string>("Phone_2")
                         .HasMaxLength(10);
 
-                    b.Property<bool>("sex");
+                    b.Property<bool>("Sex");
 
-                    b.Property<int>("store_amount");
+                    b.Property<int>("Store_amount");
 
-                    b.HasKey("user_no");
+                    b.HasKey("User_no");
 
                     b.ToTable("User");
                 });

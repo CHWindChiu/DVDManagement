@@ -1,0 +1,124 @@
+﻿@model DVDManagement.Common.PaginatedList<DVDManagement.Models.User>
+
+    <div class="card col-md-8">
+        <form asp-action="Details" method="get">
+            <div class="card">
+                <div class="card-body">
+                    <div class="input-group">
+                        <div class="input-group-btn search-panel">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span id="searchConcept">搜尋方式</span> <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a>Email</a></li>
+                                <li><a>電話</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- 搜尋方式參數 -->
+                        <input type="hidden" name="searchParam" value="@ViewData[" CurrentFilterType"]" id="searchParam">
+                        <input type="text" class="form-control" name="searchString" placeholder="搜尋內容" value="@ViewData[" currentFilter"]">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div>
+            <div class="card-body">
+                <div class="table-responsive">
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model[0].User_no)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model[0].Name)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model[0].Sex)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model[0].Email)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model[0].Phone_1)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model[0].Phone_2)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model[0].Store_amount)
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @if(Model.Count() == 0) {
+                                <tr>
+                                    <td colspan="4">
+                                        查詢不到資料
+                                    </td>
+                                </tr>
+                            }
+                            @foreach (var item in Model)
+                            {
+                            <tr>
+                                <td>
+                                    <a asp-action="Info" asp-route-user_no="@item.User_no">@Html.DisplayFor(modelItem => item.User_no)</a>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @((item.Sex)? "男" : "女")
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Phone_1)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Phone_2)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Store_amount)
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    @await Html.PartialAsync("_PaginatedListPartial", Model)
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section scripts
+    {
+    <script>
+        $(document).ready(function (e) {
+                        var searchParam = $("#searchParam").val()
+            if (searchParam != "")
+                        {
+                            var concept = searchParam;
+                $('.search-panel span#searchConcept').text(concept);
+                $('.input-group #searchParam').val(concept);
+                        }
+
+            $('.search-panel .dropdown-menu').find('a').click(function(e) {
+                            e.preventDefault();
+                            var concept = $(this).text();
+                $('.search-panel span#searchConcept').text(concept);
+                $('.input-group #searchParam').val(concept);
+                        });
+                    });
+    </script>
+    }

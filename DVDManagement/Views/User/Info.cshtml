@@ -1,0 +1,49 @@
+﻿@model DVDManagement.Models.User
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+            <label asp-for="User_no" class="form-control-label"></label> : @Html.DisplayFor(m => m.User_no)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <label asp-for="Name" class="form-control-label"></label> : @Html.DisplayFor(m => m.Name)
+        </div>
+        <div class="col-md-2">
+            <label asp-for="Sex" class="form-control-label"></label> : @((Model.Sex) ? "男" : "女")
+        </div>
+        <div class="col-md-2">
+            <label asp-for="Birthday" class="form-control-label"></label> : @Html.DisplayFor(m => m.Birthday)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <label asp-for="Email" class="form-control-label"></label> : @Html.DisplayFor(m => m.Email)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <label asp-for="Phone_1" class="form-control-label"></label> : @Html.DisplayFor(m => m.Phone_1)
+        </div>
+        <div class="col-md-2">
+            <label asp-for="Phone_2" class="form-control-label"></label> : @Html.DisplayFor(m => m.Phone_2)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <a class="btn btn-success"
+                asp-action="Modify" 
+                asp-route-user_no="@Model.User_no">
+                修改
+            </a>
+            <button class="btn btn-danger">刪除</button>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+}

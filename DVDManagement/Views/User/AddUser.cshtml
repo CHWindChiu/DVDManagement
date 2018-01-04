@@ -1,0 +1,96 @@
+﻿@model DVDManagement.Models.UserViewModel.AddUserViewModel
+
+@section Styles {
+    <link href="~/css/bootstrap-datepicker3.standalone.css" rel="stylesheet" />
+}
+
+<div class="card">
+    <div class="card-body">
+        <form asp-action="addUser" asp-controller="user" class="form-horizontal form-material">
+            <div class="form-group">
+                <label asp-for="Name" class="col-md-12"></label>
+                <div class="col-md-12">
+                    <input asp-for="Name" type="text" class="form-control form-control-line">
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Sex" class="col-md-12"></label>
+                <div class="col-md-12">
+                    <input asp-for="Sex" type="radio" value="true" />男
+                    <input asp-for="Sex" type="radio" value="false" />女
+                    <span asp-validation-for="Sex" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Birthday" class="col-md-12"></label>
+                <div class="col-md-12">
+                    <input asp-for="Birthday" id="input-group" type="text" class="form-control">
+                    <span asp-validation-for="Birthday" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="col-md-12"></label>
+                <div class="col-md-12">
+                    <input asp-for="Email" type="text" class="form-control form-control-line">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Phone_1" class="col-md-12"></label>
+                <div class="col-md-12">
+                    <input asp-for="Phone_1" type="text" class="form-control form-control-line">
+                    <span asp-validation-for="Phone_1" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Phone_2" class="col-md-12"></label>
+                <div class="col-md-12">
+                    <input asp-for="Phone_2" type="text" class="form-control form-control-line">
+                    <span asp-validation-for="Phone_2" class="text-danger"></span>
+                </div>
+            </div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <button type="submit" class="btn btn-success">送出</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script src="~/lib/bootstrap/dist/js/bootstrap-birthday.js"></script>
+
+    <script>
+        $(document).ready(function (e) {
+            $('#input-group').bootstrapBirthday(
+                {
+                    text: {
+                        year: "年份",
+                        month: "月份",
+                        day: "日",
+                        months: {
+                            short: [
+                                "一月",
+                                "二月",
+                                "三月",
+                                "四月",
+                                "五月",
+                                "六月",
+                                "七月",
+                                "八月",
+                                "九月",
+                                "十月",
+                                "十一月",
+                                "十二月"
+                            ]
+                        }
+                    }
+                }
+            );
+        });
+    </script>
+}

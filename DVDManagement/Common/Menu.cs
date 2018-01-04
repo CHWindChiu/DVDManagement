@@ -23,8 +23,8 @@ namespace DVDManagement.Common
 
         private static string[,] userItemArray = new string[,]
         {
-            { "新增客戶", "User", "New" },
-            { "客戶資料", "User", "Details" }
+            { "新增會員", "User", "AddUser" },
+            { "會員資料", "User", "Details" }
         };
 
         private static string[,] movieItemArray = new string[,]
@@ -41,7 +41,7 @@ namespace DVDManagement.Common
                     return new string[] { "管理者", "Home", "Index" };
 
                 case Area.User:
-                    return new string[] { "使用者", "User", "Details" };
+                    return new string[] { "會員", "User", "Details" };
 
                 case Area.Movie:
                     return new string[] { "影片", "Movie", "Details" };
