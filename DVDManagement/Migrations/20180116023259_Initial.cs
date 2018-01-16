@@ -31,14 +31,14 @@ namespace DVDManagement.Migrations
                     AccessFailedCount = table.Column<int>(nullable: false),
                     Address = table.Column<string>(maxLength: 100, nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(maxLength: 256, nullable: true),
+                    Email = table.Column<string>(maxLength: 256, nullable: false),
                     EmailConfirmed = table.Column<bool>(nullable: false),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
                     PasswordHash = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(maxLength: 10, nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
                     SecurityStamp = table.Column<string>(nullable: true),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
@@ -69,31 +69,21 @@ namespace DVDManagement.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Dvd_recode",
-                columns: table => new
-                {
-                    Movie_code = table.Column<string>(maxLength: 10, nullable: false),
-                    Type = table.Column<byte>(nullable: false),
-                    User_no = table.Column<string>(maxLength: 10, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Dvd_recode", x => x.Movie_code);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Transaction",
                 columns: table => new
                 {
-                    User_no = table.Column<string>(maxLength: 10, nullable: false),
-                    Add_amount = table.Column<int>(nullable: false),
-                    Movie_code = table.Column<string>(maxLength: 10, nullable: true),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Amount = table.Column<int>(nullable: false),
+                    Movie_code = table.Column<long>(nullable: true),
+                    Movie_name = table.Column<string>(nullable: true),
                     Trans_date = table.Column<DateTime>(nullable: false),
-                    Type = table.Column<byte>(nullable: false)
+                    Type = table.Column<byte>(nullable: false),
+                    User_no = table.Column<long>(maxLength: 10, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Transaction", x => x.User_no);
+                    table.PrimaryKey("PK_Transaction", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -221,6 +211,26 @@ namespace DVDManagement.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Dvd_recode",
+                columns: table => new
+                {
+                    Movie_code = table.Column<long>(nullable: false),
+                    Rent_date = table.Column<DateTime>(nullable: false),
+                    Status = table.Column<byte>(nullable: false),
+                    User_no = table.Column<long>(maxLength: 10, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Dvd_recode", x => x.Movie_code);
+                    table.ForeignKey(
+                        name: "FK_Dvd_recode_Dvd_info_Movie_code",
+                        column: x => x.Movie_code,
+                        principalTable: "Dvd_info",
+                        principalColumn: "Movie_code",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -279,9 +289,6 @@ namespace DVDManagement.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Dvd_info");
-
-            migrationBuilder.DropTable(
                 name: "Dvd_recode");
 
             migrationBuilder.DropTable(
@@ -295,6 +302,9 @@ namespace DVDManagement.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Dvd_info");
         }
     }
 }

@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - DVDManagement</title>
 
-    <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-    </environment>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
 </head>
 
 <body>
@@ -16,7 +14,7 @@
             <div class="panel panel-info">
                 <div class="panel-heading">
                     <div class="panel-title">DVD租借系統</div>
-                    <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#">忘記密碼?</a></div>
+                    @*<div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#">忘記密碼?</a></div>*@
                 </div>
                 <div style="padding-top:30px" class="panel-body">
                     <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
@@ -24,30 +22,29 @@
                     <form id="loginform" class="form-horizontal" role="form" asp-action="Login">
                         <div style="margin-bottom: 25px" class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            <input id="login-username" type="text" class="form-control" name="userName" value="hank" placeholder="帳號">
+                            <input id="login-username" type="text" class="form-control" name="userName" value="admin" placeholder="帳號">
                         </div>
 
                         <div style="margin-bottom: 25px" class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                            <input id="login-password" type="password" class="form-control" name="password" value="Hank@1234" placeholder="密碼">
+                            <input id="login-password" type="password" class="form-control" name="password" value="admin@1234" placeholder="密碼">
                         </div>
 
-                        <div class="input-group">
+                        @*<div class="input-group">
                             <div class="checkbox">
                                 <label>
                                     <input id="login-remember" type="checkbox" name="remember" value="1"> 記住我
                                 </label>
                             </div>
-                        </div>
+                        </div>*@
 
                         <div style="margin-top:10px" class="form-group">
-                            <!-- Button -->
                             <div class="col-sm-12 controls">
                                 <input type="submit" id="btn-login" href="#" class="btn btn-success" value="登入">
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        @*<div class="form-group">
                             <div class="col-md-12 control">
                                 <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
                                     Don't have an account!
@@ -56,7 +53,7 @@
                                     </a>
                                 </div>
                             </div>
-                        </div>
+                        </div>*@
                     </form>
 
                 </div>
@@ -64,10 +61,8 @@
         </div>
     </div>
 
-    <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-    </environment>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
 
 </body>
 </html>

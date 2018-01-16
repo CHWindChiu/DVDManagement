@@ -9,14 +9,15 @@ namespace DVDManagement.Models.AdminViewModel
     public class RegisterViewModel
     {
         [Required(ErrorMessage = "帳號不能為空白")]
-        //[RegularExpression(@"[a-zA-Z0-9_]{4,10}", ErrorMessage = "帳號必須是英文字母或數字或_，長度4~10個字")]
+        [RegularExpression(@"[a-zA-Z0-9_]{4,10}", ErrorMessage = "帳號必須是英文字母或數字或_，長度4~10個字")]
         [DisplayName("帳號")]
         public string UserName { get; set; }
 
         [DataType(DataType.Password)]
         [DisplayName("密碼")]
         [Required(ErrorMessage = "密碼不能為空白")]
-        //[RegularExpression(@"[a-zA-Z0-9_]{4,20}", ErrorMessage = "密碼必須是英文字母或數字或_，長度4~20個字")]
+        [RegularExpression(@"(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,20}",
+            ErrorMessage = "密碼需要至少一個大寫和小寫英文字母和數字，長度4~20個字")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]

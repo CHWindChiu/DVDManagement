@@ -1,0 +1,24 @@
+﻿
+<div class="modal fade" id="deletePopUp" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                @ViewData["CheckDelete"]
+            </div>
+            <div class="modal-footer">
+                <button id="deleteBtn" type="button" class="btn btn-secondary" data-dismiss="modal">刪除</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="successDeletePrompt" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                @ViewData["SuccessDelete"]
+            </div>
+        </div>
+    </div>
+</div>

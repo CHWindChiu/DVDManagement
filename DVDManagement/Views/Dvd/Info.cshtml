@@ -1,0 +1,90 @@
+﻿@model DVDManagement.Models.Dvd_info
+
+@{
+    ViewData["CheckDelete"] = "確定要刪除此DVD?";
+    ViewData["SuccessDelete"] = "成功刪除DVD";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+            <label asp-for="@Model.Movie_code" class="form-control-label"></label> : @Model.Movie_code
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <label asp-for="@Model.Name" class="form-control-label"></label> : @Model.Name
+        </div>
+        <div class="col-md-2">
+            <label asp-for="@Model.Type" class="form-control-label"></label> : @Model.Type
+        </div>
+        <div class="col-md-2">
+            <label asp-for="@Model.Rent" class="form-control-label"></label> : @Model.Rent
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <label asp-for="@Model.Overdue" class="form-control-label"></label> : @Model.Overdue
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <label asp-for="@Model.Time_limit" class="form-control-label"></label> : @Model.Time_limit
+        </div>
+        <div class="col-md-2">
+            <label asp-for="@Model.Dvd_recode.Status" class="form-control-label"></label> : @Model.Dvd_recode.Status
+        </div>
+        <div class="col-md-2">
+            <label asp-for="@Model.Dvd_recode.User_no" class="form-control-label"></label> : @Model.Dvd_recode.User_no
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <a class="btn btn-success"
+                asp-action="Modify" 
+                asp-route-movie_code="@Model.Movie_code">
+                修改
+            </a>
+            <button class="btn btn-danger" data-toggle="modal" data-target="#deletePopUp">刪除</button>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("_DeleteDataPartial")
+@await Html.PartialAsync("_FailPromptPartial")
+
+@section scripts
+{
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script src="~/js/ajaxErrorHandel.js"></script>
+
+    <script>
+    $(document).ready(function (e) {
+        $("#deleteBtn").click(function () {
+            var url = "@Url.Action("Delete", "DVD")";
+            $.ajax(url,
+                {
+                    type: 'post',
+                    data: 'movie_code=@Model.Movie_code',
+                    success: function (data) {
+                        if (data == "Ok")
+                        {
+                            $('#deletePopUp').modal('hide');
+                            $('#successDeletePrompt').modal('toggle');
+                            window.location.href = "@Url.Action("Details", "DVD")"
+                        }
+                        else
+                        {
+                            $('#deletePopUp').modal('hide')
+                            $("#failPromptContent").html(data);
+                            $('#failPromptPopUp').modal('toggle');
+                        }
+                    },
+                    error: function (jqXHR, exception) {
+                        ajaxErrorHandle(jqXHR, exception)
+                    },
+                });
+        });
+    })
+    </script>
+}

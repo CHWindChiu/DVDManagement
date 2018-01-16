@@ -3,9 +3,10 @@
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
 
-<a asp-action="Details"
+<a asp-action="@ViewData["DetailActionName"]"
    asp-route-sortOrder="@ViewData["CurrentSort"]"
    asp-route-page="@(Model.PageIndex - 1)"
+   asp-route-id="@ViewData["DetailId"]"
    asp-route-currentFilter="@ViewData["CurrentFilter"]"
    class="btn btn-default @prevDisabled">
     前一頁
@@ -13,9 +14,10 @@
 
 @if ((Model.PageIndex - 2) > 1)
 {
-    <a asp-action="Details"
+    <a asp-action="@ViewData["DetailActionName"]"
        asp-route-sortOrder="@ViewData["CurrentSort"]"
        asp-route-page="1"
+       asp-route-id="@ViewData["DetailId"]"
        asp-route-currentFilter="@ViewData["CurrentFilter"]">
        &nbsp;1
     </a>@:...&nbsp;
@@ -25,9 +27,10 @@
 {
     if (i == (Model.PageIndex))
     {
-        <a asp-action="Details"
+        <a asp-action="@ViewData["DetailActionName"]"
             asp-route-sortOrder="@ViewData["CurrentSort"]"
             asp-route-page="@i"
+           asp-route-id="@ViewData["DetailId"]"
             asp-route-currentFilter="@ViewData["CurrentFilter"]"
             style="font-size:20px">
             &nbsp;@i&nbsp;
@@ -35,9 +38,10 @@
     }
     else if (i > 0 && i <= Model.TotalPages)
     {
-        <a asp-action="Details"
+        <a asp-action="@ViewData["DetailActionName"]"
            asp-route-sortOrder="@ViewData["CurrentSort"]"
            asp-route-page="@i"
+           asp-route-id="@ViewData["DetailId"]"
            asp-route-currentFilter="@ViewData["CurrentFilter"]">
             &nbsp;@i&nbsp;
         </a>
@@ -47,17 +51,19 @@
 @if ((Model.TotalPages - 2) > Model.PageIndex)
 {
     @:&nbsp;...
-    <a asp-action="Details"
+    <a asp-action="@ViewData["DetailActionName"]"
        asp-route-sortOrder="@ViewData["CurrentSort"]"
        asp-route-page="@Model.TotalPages"
+       asp-route-id="@ViewData["DetailId"]"
        asp-route-currentFilter="@ViewData["CurrentFilter"]">
        @Model.TotalPages&nbsp;
     </a>
 }
 
-<a asp-action="Details"
+<a asp-action="@ViewData["DetailActionName"]"
    asp-route-sortOrder="@ViewData["CurrentSort"]"
    asp-route-page="@(Model.PageIndex + 1)"
+   asp-route-id="@ViewData["DetailId"]" 
    asp-route-currentFilter="@ViewData["CurrentFilter"]"
    class="btn btn-default @nextDisabled">
     後一頁

@@ -1,49 +1,278 @@
-﻿@model DVDManagement.Models.User
+﻿@model DVDManagement.Models.UserViewModel.UserInfoViewModel
+
+@{
+    ViewData["CheckDelete"] = "確定要刪除此會員?";
+    ViewData["SuccessDelete"] = "成功刪除會員";
+}
 
 <div class="container">
+
+    <div class="row">
+        <nav class="navbar navbar-default col-md-4">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">會員資料 <span class="sr-only">(current)</span></a></li>
+                    <li><a asp-action="TransactionDetails"
+                           asp-route-page="1"
+                           asp-route-id="@Model.User.User_no">
+                            交易紀錄
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
     <div class="row">
         <div class="col-md-2">
-            <label asp-for="User_no" class="form-control-label"></label> : @Html.DisplayFor(m => m.User_no)
+            <label asp-for="User.User_no" class="form-control-label"></label> : @Html.DisplayFor(m => m.User.User_no)
         </div>
     </div>
+
     <div class="row">
         <div class="col-md-2">
-            <label asp-for="Name" class="form-control-label"></label> : @Html.DisplayFor(m => m.Name)
+            <label asp-for="User.Name" class="form-control-label"></label> : @Html.DisplayFor(m => m.User.Name)
         </div>
         <div class="col-md-2">
-            <label asp-for="Sex" class="form-control-label"></label> : @((Model.Sex) ? "男" : "女")
+            <label asp-for="User.Sex" class="form-control-label"></label> : @((Model.User.Sex) ? "男" : "女")
         </div>
         <div class="col-md-2">
-            <label asp-for="Birthday" class="form-control-label"></label> : @Html.DisplayFor(m => m.Birthday)
+            <label asp-for="User.Birthday" class="form-control-label"></label> : @Html.DisplayFor(m => m.User.Birthday)
         </div>
     </div>
+
     <div class="row">
         <div class="col-md-2">
-            <label asp-for="Email" class="form-control-label"></label> : @Html.DisplayFor(m => m.Email)
+            <label asp-for="User.Email" class="form-control-label"></label> : @Html.DisplayFor(m => m.User.Email)
         </div>
     </div>
+
     <div class="row">
         <div class="col-md-2">
-            <label asp-for="Phone_1" class="form-control-label"></label> : @Html.DisplayFor(m => m.Phone_1)
+            <label asp-for="User.Phone_1" class="form-control-label"></label> : @Html.DisplayFor(m => m.User.Phone_1)
         </div>
         <div class="col-md-2">
-            <label asp-for="Phone_2" class="form-control-label"></label> : @Html.DisplayFor(m => m.Phone_2)
+            <label asp-for="User.Phone_2" class="form-control-label"></label> : @Html.DisplayFor(m => m.User.Phone_2)
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-2">
+
+    <div class="row" style="margin-top: 20px">
+        <div class="col-md-6">
+            <label asp-for="User.Store_amount" class="form-control-label"></label> : <span id="depositInfo">@Html.DisplayFor(m => m.User.Store_amount)</span>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 20px">
+        <div class="col-md-12">
             <a class="btn btn-success"
-                asp-action="Modify" 
-                asp-route-user_no="@Model.User_no">
+               asp-action="Modify"
+               asp-route-user_no="@Model.User.User_no">
                 修改
             </a>
-            <button class="btn btn-danger">刪除</button>
+            <button class="btn btn-danger" data-toggle="modal" data-target="#deletePopUp">刪除</button>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 20px">
+        <div class="col-md-12">
+            <a class="btn btn-success" data-toggle="modal" data-target="#depositPopUp">儲值</a>
+            <a id="rentBtn" class="btn btn-success" data-toggle="modal" data-target="#rentPopUp">租片</a>
+            <a id="returnDVDBtn" class="btn btn-success" data-toggle="modal" data-target="#rentPopUp">還片</a>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <h3><b>目前租片:</b></h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => Model.Dvd_infoList.First().Movie_code)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => Model.Dvd_infoList.First().Name)
+                    </th>
+                </tr>
+            </thead>
+            @if (Model.Dvd_infoList.Count() == 0)
+            {
+                <tr>
+                    <td colspan="4" align="center">
+                        查詢不到資料
+                    </td>
+                </tr>
+            }
+
+            <tbody>
+                @foreach (var dvd in Model.Dvd_infoList)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(i => dvd.Movie_code)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(i => dvd.Name)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
+
+@*儲值介面*@
+<div class="modal fade" id="depositPopUp" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form asp-action="deposit" asp-controller="user" method="post">
+                    <label asp-for="User.Store_amount"></label>:
+                    <input asp-for="User.Store_amount" id="depositAmount" type="number" value="0" min="0" step="0" data-number-to-fixed="0" class="form-control">
+                    <span asp-validation-for="User.Store_amount" class="text-danger"></span>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="depositSubmitBtn" class="btn btn-secondary" data-dismiss="modal">確定</button>
+                <button class="btn btn-secondary" data-dismiss="modal">取消</button>
+            </div>
         </div>
     </div>
 </div>
 
+@*租片還片介面*@
+<div class="modal fade" id="rentPopUp" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                請輸入影片代碼: <input id="movieCodeInput" type="text">
+                <button id="dvdSubmitBtn" type="button" class="btn btn-secondary">確定</button>
+                <div><font id="errMsg" color="red"></font></div>
+                <div id="contentTitle"></div>
+                <div id="movieList"></div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-success" asp-action="Info" asp-route-user_no="@Model.User.User_no">關閉</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("_FailPromptPartial")
+@await Html.PartialAsync("_DeleteDataPartial")
+
 @section scripts
 {
+    <script src="~/js/ajaxErrorHandel.js"></script>
     @await Html.PartialAsync("_ValidationScriptsPartial")
 
+    <script>
+        $(document).ready(function (e) {
+
+        var rentOrReturn = 0;
+
+        $('#rentBtn').click(function () {
+            rentOrReturn = 0;
+        });
+
+        $('#returnDVDBtn').click(function () {
+            rentOrReturn = 1;
+        });
+
+        $('#dvdSubmitBtn').click(function () {
+
+            if (rentOrReturn == 0) {
+                var url = "@Url.Action("Rent", "User")";
+            }
+            else
+            {
+                var url = "@Url.Action("ReturnDVD", "User")";
+            }
+
+             var movieCodeInput = $("#movieCodeInput").val()
+            $.ajax(url,
+                {
+                    type: 'post',
+                    data: 'user_no=@Model.User.User_no&movie_code=' + movieCodeInput,
+                    success: function (data) {
+                        if (rentOrReturn == 0 && data == '0')
+                        {
+                            $("#errMsg").html("找不到此DVD");
+                        }
+                        else if (rentOrReturn == 0 && data == '1') {
+                            $("#errMsg").html("此DVD已經出租");
+                        }
+                        else if (rentOrReturn == 0 && data == '2') {
+                            $("#errMsg").html("金額不足");
+                        }
+                        else if (rentOrReturn == 1 && data == '0') {
+                            $("#errMsg").html("會員未租此DVD");
+                        }
+                        else
+                        {
+                            var dvd = JSON.parse(data);
+                            $("#errMsg").html('');
+                            if (rentOrReturn == 0) {
+                                $("#contentTitle").html("已租影片:<br/>");
+                            }
+                            else {
+                                $("#contentTitle").html("已還影片:<br/>");
+                            }
+                            
+                            $("#movieList").append(dvd.Movie_code + ' ' + dvd.Name + '<br/>');
+                        }
+                    },
+                    error: function (jqXHR, exception) {
+                        ajaxErrorHandle(jqXHR, exception)
+                    },
+                });
+         })
+
+        $('#depositSubmitBtn').click(function () {
+            var url = "@Url.Action("Deposit", "User")";
+            $.ajax(url,
+                {
+                    type: 'post',
+                    data: 'user_no=@Model.User.User_no&amount=' + $("#depositAmount").val(),
+                    success: function (amount) {
+                        $('#depositPopUp').modal('hide');
+                        $('#depositInfo').html(amount);
+                    },
+                    error: function (jqXHR, exception) {
+                        ajaxErrorHandle(jqXHR, exception)
+                    },
+                });
+        })
+
+        $('#successDeletePrompt').on('hidden.bs.modal', function (e) {
+            window.location.href = "@Url.Action("Details", "User")"
+        })
+
+        $("#deleteBtn").click(function () {
+            var url = "@Url.Action("Delete", "User")";
+            $.ajax(url,
+                {
+                    type: 'post',
+                    data: 'user_no=@Model.User.User_no',
+                    success: function (data) {
+                        if (data == "Ok")
+                        {
+                            $('#deletePopUp').modal('hide');
+                            $('#successDeletePrompt').modal('toggle');
+                        }
+                        else
+                        {
+                            $('#deletePopUp').modal('hide')
+                            $("#failPromptContent").html(data);
+                            $('#failPromptPopUp').modal('toggle');
+                        }
+                    },
+                    error: function (jqXHR, exception) {
+                        ajaxErrorHandle(jqXHR, exception)
+                    },
+                });
+        });
+    })
+    </script>
 }

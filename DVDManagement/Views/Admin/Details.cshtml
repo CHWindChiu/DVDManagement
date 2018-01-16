@@ -1,5 +1,9 @@
 ﻿@model DVDManagement.Common.PaginatedList<DVDManagement.Models.Admin>
 
+@{
+    ViewData["DetailActionName"] = "Details";
+}
+
     <div class="card col-md-8">
         <form asp-action="Details" method="get">
             <div class="card">
@@ -7,17 +11,19 @@
                     <div class="input-group">
                         <div class="input-group-btn search-panel">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                <span id="searchConcept">搜尋方式</span> <span class="caret"></span>
+                                <span id="searchConcept">@((ViewData["CurrentSearchParam"] == null)? "客戶代號" : @ViewData["CurrentSearchParam"])</span>
+                                <span class="caret"></span>
                             </button>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a>帳號</a></li>
+                            <ul class="dropdown-menu">
+                                <li><a>客戶代號</a></li>
+                                <li><a>名稱</a></li>
                                 <li><a>Email</a></li>
                                 <li><a>電話</a></li>
                             </ul>
                         </div>
 
                         <!-- 搜尋方式參數 -->
-                        <input type="hidden" name="searchParam" value="@ViewData[" CurrentFilterType"]" id="searchParam">
+                        <input type="hidden" name="searchParam" value="@ViewData["CurrentSearchParam"]" id="searchParam">
                         <input type="text" class="form-control" name="searchString" placeholder="搜尋內容" value="@ViewData[" currentFilter"]">
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
@@ -27,10 +33,9 @@
             </div>
         </form>
 
-        <div>
+        <div style="margin-top:20px">
             <div class="card-body">
                 <div class="table-responsive">
-
                     <table class="table">
                         <thead>
                             <tr>

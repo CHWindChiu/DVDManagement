@@ -1,0 +1,101 @@
+﻿@model DVDManagement.Common.PaginatedList<DVDManagement.Models.Transaction>
+
+@{
+    ViewData["DetailActionName"] = "TransactionDetails";
+}
+
+<div class="container">
+
+    <div class="row">
+        <nav class="navbar navbar-default col-md-4">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a asp-action="info"
+                           asp-route-user_no="@ViewData["DetailId"]">
+                            會員資料
+                        </a>
+                    </li>
+                    <li class="active"><a href="#">交易紀錄<span class="sr-only">(current)</span></a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().Id)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().Type)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().Movie_code)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().Movie_name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().Amount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().Trans_date)
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model.Count() == 0)
+                {
+                    <tr>
+                        <td colspan="6" align="center">
+                            查詢不到資料
+                        </td>
+                    </tr>
+                }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(i => item.Id)
+                        </td>
+                        <td>
+                            @if (item.Type == 0)
+                            {
+                                @:儲值
+                            }
+                            else if (item.Type == 1)
+                            {
+                                @:租片
+                            }
+                            else if (item.Type == 2)
+                            {
+                                @:還片
+                            }
+                        </td>
+                        <td>
+                            @if (item.Movie_code > 0)
+                            {
+                                @item.Movie_code
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(i => item.Movie_name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(i => item.Amount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(i => item.Trans_date)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        @await Html.PartialAsync("_PaginatedListPartial", Model)
+    </div>
+</div>

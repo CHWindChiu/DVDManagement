@@ -28,9 +28,9 @@ namespace DVDManagement.Data
 
         private static async Task CreateDefaultUserAndRoleForApplication(UserManager<Admin> um, RoleManager<IdentityRole> rm, ILogger<DbInitializer> logger)
         {
-            const string administratorRole = "Administrator";
-            const string email = "hank1234@gmail.com";
-            const string password = "Hank@1234";
+            //const string administratorRole = "Administrator";
+            const string email = "admin1234@gmail.com";
+            const string password = "admin@1234";
 
             //await CreateDefaultAdministratorRole(rm, logger, administratorRole);
             var user = await CreateDefaultUser(um, logger, email, password);
@@ -59,7 +59,7 @@ namespace DVDManagement.Data
             logger.LogInformation($"Create default user with email `{email}` for application");
             var user = new Admin
             {
-                UserName = "hank",
+                UserName = "admin",
                 Email = email,
             };
 
@@ -78,23 +78,6 @@ namespace DVDManagement.Data
             var createdUser = await um.FindByEmailAsync(email);
             return createdUser;
         }
-        /*
-        private static async Task SetPasswordForDefaultUser(UserManager<Admin> um, ILogger<DbInitializer> logger, string email, string password, Admin user)
-        {
-            logger.LogInformation($"Set password for default user `{email}`");
-            IdentityResult ir = await um.AddPasswordAsync(user, password);
-            if (ir.Succeeded)
-            {
-                logger.LogTrace($"Set password `{password}` for default user `{email}` successfully");
-            }
-            else
-            {
-                var exception = new ApplicationException($"Password for the user `{email}` cannot be set");
-                logger.LogError(exception, GetIdentiryErrorsInCommaSeperatedList(ir));
-                throw exception;
-            }
-        }
-        */
 
         private static async Task AddDefaultRoleToDefaultUser(UserManager<Admin> um, ILogger<DbInitializer> logger, string email, string administratorRole, Admin user)
         {

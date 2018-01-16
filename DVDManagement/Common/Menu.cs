@@ -12,7 +12,6 @@ namespace DVDManagement.Common
             Admin,
             User,
             Movie,
-            Statistics
         }
 
         private static string[,] adminItemArray = new string[,]
@@ -29,8 +28,8 @@ namespace DVDManagement.Common
 
         private static string[,] movieItemArray = new string[,]
         {
-            { "新增電影", "Movie", "New" },
-            { "電影查詢", "Movie", "Details" }
+            { "新增DVD", "DVD", "AddDVD" },
+            { "DVD查詢", "DVD", "Details" }
         };
 
         public static string[] GetTitleItem(Area area)
@@ -38,16 +37,13 @@ namespace DVDManagement.Common
             switch (area)
             {
                 case Area.Admin:
-                    return new string[] { "管理者", "Home", "Index" };
+                    return new string[] { "管理者", "Admin"};
 
                 case Area.User:
-                    return new string[] { "會員", "User", "Details" };
+                    return new string[] { "會員", "User"};
 
                 case Area.Movie:
-                    return new string[] { "影片", "Movie", "Details" };
-
-                case Area.Statistics:
-                    return new string[] { "統計分析", "Statistics", "Index" };
+                    return new string[] { "DVD", "DVD" };
             }
 
             return null;
@@ -65,10 +61,6 @@ namespace DVDManagement.Common
 
                 case Area.Movie:
                     return movieItemArray;
-
-                case Area.Statistics:
-                    return movieItemArray;
-
             }
 
             return null;

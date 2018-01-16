@@ -22,10 +22,8 @@ namespace DVDManagement.Controllers
     public class AdminController : Controller
     {
         private readonly DVDMAGContext _context;
-
         private readonly UserManager<Admin> _userManager;
         private readonly SignInManager<Admin> _signInManager;
-        private readonly ILogger _logger;
         private IHostingEnvironment _hostingEnvironment;
 
         public AdminController(
@@ -51,7 +49,7 @@ namespace DVDManagement.Controllers
             var userInfo = await _userManager.FindByNameAsync(userName);
             InfoViewModel model = new InfoViewModel
             {
-                adminModel = userInfo
+                AdminModel = userInfo
             };
             return View(model);
         }
@@ -67,10 +65,10 @@ namespace DVDManagement.Controllers
                 return Ok("驗證失敗");
             }
 
-            var user = await _userManager.FindByNameAsync(model.adminModel.UserName);
-            user.Email = model.Email;
-            user.PhoneNumber = model.PhoneNumber;
-            user.Address = model.Address;
+            var user = await _userManager.FindByNameAsync(model.AdminModel.UserName);
+            user.Email = model.AdminModel.Email;
+            user.PhoneNumber = model.AdminModel.PhoneNumber;
+            user.Address = model.AdminModel.Address;
 
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
@@ -166,49 +164,30 @@ namespace DVDManagement.Controllers
                     }
                 }
 
-                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
-                // Send an email with this link
-                //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
-                //    "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
-                //await _signInManager.SignInAsync(user, isPersistent: false);
-                //_logger.LogInformation(3, "User created a new account with password.");
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Details));
             }
 
             AddErrors(result);
-
             return View();
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(
             string sortOrder,
-            string currentFilter,
             string searchParam,
             string searchString,
             int? page)
         {
-            ViewData["CurrentSort"] = sortOrder;
             if (searchParam != null)
             {
-                ViewData["CurrentFilterType"] = searchParam;
+                ViewData["CurrentSearchParam"] = searchParam;
             }
-
-            //ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            //ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 
             if (searchString != null)
             {
                 page = 1;
             }
-            else
-            {
-                searchString = currentFilter;
-            }
 
-            ViewData["CurrentFilter"] = searchString;
             var allAdmins = _userManager.Users;
             IQueryable<Admin> admins;
 
@@ -234,29 +213,6 @@ namespace DVDManagement.Controllers
             {
                 admins = allAdmins;
             }
-            //var admins = _context.Admin.ToListAsync();
-            //var admins = from s in _context.Admin select s;
-            //if (!String.IsNullOrEmpty(searchString))
-            //{
-            //    admins = admins.Where(s => s.LastName.Contains(searchString)
-            //                           || s.FirstMidName.Contains(searchString));
-            //}
-            //_context.Admin.ForEachAsync()
-            //switch (sortOrder)
-            //{
-            //    case "name_desc":
-            //        admins = admins.OrderByDescending(s => s.LastName);
-            //        break;
-            //    case "Date":
-            //        admins = admins.OrderBy(s => s.EnrollmentDate);
-            //        break;
-            //    case "date_desc":
-            //        admins = admins.OrderByDescending(s => s.EnrollmentDate);
-            //        break;
-            //    default:
-            //        admins = admins.OrderBy(s => s.LastName);
-            //        break;
-            //}
 
             //每頁資料筆數
             int pageSize = 5;
@@ -264,19 +220,31 @@ namespace DVDManagement.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> Delete(string userName)
+        {
+            var admin = await _context.Admin
+                .SingleOrDefaultAsync(m => m.UserName == userName);
+
+            _context.Admin.Remove(admin);
+            await _context.SaveChangesAsync();
+
+            if (admin == null)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(InfoViewModel model)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return Ok("驗證失敗");
-            //}
-
-            var user = await _userManager.FindByNameAsync(model.adminModel.UserName);
+            var user = await _userManager.FindByNameAsync(model.AdminModel.UserName);
             var changePasswordResult = await _userManager.ChangePasswordAsync(
-                user, model.changePasswordViewModel.OldPassword,
-                model.changePasswordViewModel.NewPassword
+                user, model.ChangePasswordViewModel.OldPassword,
+                model.ChangePasswordViewModel.NewPassword
                 );
 
             if (!changePasswordResult.Succeeded)
@@ -295,18 +263,5 @@ namespace DVDManagement.Controllers
                 ModelState.AddModelError(string.Empty, error.Description);
             }
         }
-
-        private IActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            else
-            {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
-            }
-        }
-
     }
 }

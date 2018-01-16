@@ -1,5 +1,10 @@
 ﻿@model DVDManagement.Models.AdminViewModel.InfoViewModel
 
+@{
+    ViewData["CheckDelete"] = "確定要刪除此管理者?";
+    ViewData["SuccessDelete"] = "成功刪除管理者";
+}
+
 <div class="container">
     <div class="row">
 
@@ -8,9 +13,8 @@
             <div class="card">
                 <div class="card-body">
                     <center class="m-t-30">
-                        <img src="@Url.Content($"~/images/AvatarImage/{Model.adminModel.UserName}.jpg")" class="img-circle" width="150" />
-                        <h4 class="card-title m-t-10">@Model.adminModel.UserName</h4>
-                        <h6 class="card-subtitle">Accoubts Manager Amix corp</h6>
+                        <img src="@Url.Content($"~/images/AvatarImage/{Model.AdminModel.UserName}.jpg")" class="img-circle" width="150" />
+                        <h4 class="card-title m-t-10">@Model.AdminModel.UserName</h4>
                     </center>
                 </div>
             </div>
@@ -23,57 +27,58 @@
                     <form id="modifyForm" asp-action="Modify" asp-controller="admin" method="post" class="form-horizontal form-material">
                         <div asp-validation-summary="All" class="text-danger"></div>
                         <div class="form-group">
-                            <label asp-for="UserName" class="form-control-label"></label> : @Html.DisplayFor(m => m.adminModel.UserName)
-                            <input id="userNameHidden" type="hidden" asp-for="adminModel.UserName" value="@Model.adminModel.UserName">
+                            <label asp-for="AdminModel.UserName" class="form-control-label"></label> : @Html.DisplayFor(m => m.AdminModel.UserName)
+                            <input id="userNameHidden" type="hidden" asp-for="AdminModel.UserName" value="@Model.AdminModel.UserName">
                         </div>
                         <div class="form-group">
-                            <label asp-for="Email" class="form-control-label"></label> : 
-                            <input type="email" asp-for="Email" value="@Model.adminModel.Email" class="form-control form-control-line">
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <label asp-for="AdminModel.Email" class="form-control-label"></label> :
+                            <input type="email" asp-for="AdminModel.Email" value="@Model.AdminModel.Email" class="form-control form-control-line">
+                            <span asp-validation-for="AdminModel.Email" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="PhoneNumber" class="form-control-label"></label> : 
-                            <input type="text" asp-for="PhoneNumber" value="@Model.adminModel.PhoneNumber" class="form-control form-control-line">
-                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            <label asp-for="AdminModel.PhoneNumber" class="form-control-label"></label> :
+                            <input type="text" asp-for="AdminModel.PhoneNumber" value="@Model.AdminModel.PhoneNumber" class="form-control form-control-line">
+                            <span asp-validation-for="AdminModel.PhoneNumber" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Address" class="form-control-label"></label> : 
-                            <input type="text" asp-for="Address" value="@Model.adminModel.Address" class="form-control form-control-line">
-                            <span asp-validation-for="Address" class="text-danger"></span>
+                            <label asp-for="AdminModel.Address" class="form-control-label"></label> :
+                            <input type="text" asp-for="AdminModel.Address" value="@Model.AdminModel.Address" class="form-control form-control-line">
+                            <span asp-validation-for="AdminModel.Address" class="text-danger"></span>
                         </div>
+                    </form>
 
                         <div class="form-group">
                             <button id="modifydBtn" type="button" class="btn btn-success">更新</button>
-                            <button class="btn btn-danger">刪除</button>
+                            <button class="btn btn-danger" data-toggle="modal" data-target="#deletePopUp">刪除</button>
                         </div>
 
                         <div class="form-group">
                             <a href="#" id="changePasswordPopUpBtn" class="btn btn-lg btn-success" data-toggle="modal" data-target="#changePasswordPopUp">更改密碼</a>
                         </div>
-                    </form>
                     <div class="modal fade" id="changePasswordPopUp" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">更改密碼</h5>
                                 </div>
-                                <form id="changePasswordForm"  asp-action="ResetPassword" asp-controller="admin" method="post" >
+                                <form id="changePasswordForm" asp-action="ResetPassword" asp-controller="admin" method="post" >
                                     <div asp-validation-summary="All" class="text-danger"></div>
+                                    <input type="hidden" asp-for="AdminModel.UserName" value="@Model.AdminModel.UserName">
                                     <div class="modal-body">
                                         <div class="form-group">
-                                            <label asp-for="changePasswordViewModel.OldPassword" class="form-control-label"></label> :
-                                            <input asp-for="changePasswordViewModel.OldPassword" type="password" class="form-control form-control-line">
-                                            <span asp-validation-for="changePasswordViewModel.OldPassword" class="text-danger"></span>
+                                            <label asp-for="ChangePasswordViewModel.OldPassword" class="form-control-label"></label> :
+                                            <input asp-for="ChangePasswordViewModel.OldPassword" type="password" class="form-control form-control-line">
+                                            <span asp-validation-for="ChangePasswordViewModel.OldPassword" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
-                                            <label asp-for="changePasswordViewModel.NewPassword" class="form-control-label"></label> :
-                                            <input asp-for="changePasswordViewModel.NewPassword" type="password" class="form-control form-control-line">
-                                            <span asp-validation-for="changePasswordViewModel.NewPassword" class="text-danger"></span>
+                                            <label asp-for="ChangePasswordViewModel.NewPassword" class="form-control-label"></label> :
+                                            <input asp-for="ChangePasswordViewModel.NewPassword" type="password" class="form-control form-control-line">
+                                            <span asp-validation-for="ChangePasswordViewModel.NewPassword" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
-                                            <label asp-for="changePasswordViewModel.ConfirmPassword" class="form-control-label"></label> :
-                                            <input asp-for="changePasswordViewModel.ConfirmPassword" type="password" class="form-control form-control-line">
-                                            <span asp-validation-for="changePasswordViewModel.ConfirmPassword" class="text-danger"></span>
+                                            <label asp-for="ChangePasswordViewModel.ConfirmPassword" class="form-control-label"></label> :
+                                            <input asp-for="ChangePasswordViewModel.ConfirmPassword" type="password" class="form-control form-control-line">
+                                            <span asp-validation-for="ChangePasswordViewModel.ConfirmPassword" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -89,12 +94,16 @@
             </div>
         </div>
 
+        @await Html.PartialAsync("_DeleteDataPartial")
+
     </div>
 </div>
 
 @section scripts
 {
     @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script src="~/js/ajaxErrorHandel.js"></script>
+
     <script>
         $(document).ready(function (e) {
             $("#modifydBtn").click(function () {
@@ -108,23 +117,7 @@
                         alert(data);
                     },
                     error: function (jqXHR, exception) {
-                        var msg = '';
-                        if (jqXHR.status === 0) {
-                            msg = 'Not connect.\n Verify Network.';
-                        } else if (jqXHR.status == 404) {
-                            msg = 'Requested page not found. [404]';
-                        } else if (jqXHR.status == 500) {
-                            msg = 'Internal Server Error [500].';
-                        } else if (exception === 'parsererror') {
-                            msg = 'Requested JSON parse failed.';
-                        } else if (exception === 'timeout') {
-                            msg = 'Time out error.';
-                        } else if (exception === 'abort') {
-                            msg = 'Ajax request aborted.';
-                        } else {
-                            msg = 'Uncaught Error.\n' + jqXHR.responseText;
-                        }
-                        alert(msg);
+                        ajaxErrorHandle(jqXHR, exception)
                     },
                 });
             })
@@ -133,33 +126,37 @@
                 var url = "@Url.Action("ResetPassword", "admin")";
                 $.ajax(url,
                 {
-                        type: 'post',
-                        data: $("#changePasswordForm").serialize(),
+                    type: 'post',
+                    data: $("#changePasswordForm").serialize(),
                     async: false,
                     success: function (data) {
                         alert(data);
                     },
                     error: function (jqXHR, exception) {
-                        var msg = '';
-                        if (jqXHR.status === 0) {
-                            msg = 'Not connect.\n Verify Network.';
-                        } else if (jqXHR.status == 404) {
-                            msg = 'Requested page not found. [404]';
-                        } else if (jqXHR.status == 500) {
-                            msg = 'Internal Server Error [500].';
-                        } else if (exception === 'parsererror') {
-                            msg = 'Requested JSON parse failed.';
-                        } else if (exception === 'timeout') {
-                            msg = 'Time out error.';
-                        } else if (exception === 'abort') {
-                            msg = 'Ajax request aborted.';
-                        } else {
-                            msg = 'Uncaught Error.\n' + jqXHR.responseText;
-                        }
-                        alert(msg);
+                        ajaxErrorHandle(jqXHR, exception)
                     },
                 });
             })
+
+            $('#successDeletePrompt').on('hidden.bs.modal', function (e) {
+                window.location.href = "@Url.Action("Details", "Admin")"
+            })
+
+            $("#deleteBtn").click(function () {
+                var url = "@Url.Action("Delete", "Admin")";
+                $.ajax(url,
+                    {
+                        type: 'post',
+                        data: 'userName=@Model.AdminModel.UserName',
+                        success: function () {
+                            $('#deletePopUp').modal('hide');
+                            $('#successDeletePrompt').modal('toggle');
+                        },
+                        error: function (jqXHR, exception) {
+                            ajaxErrorHandle(jqXHR, exception)
+                        },
+                    });
+            });
         });
     </script>
 }

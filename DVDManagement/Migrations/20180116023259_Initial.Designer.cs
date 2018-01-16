@@ -11,7 +11,7 @@ using System;
 namespace DVDManagement.Migrations
 {
     [DbContext(typeof(DVDMAGContext))]
-    [Migration("20171228023224_Initial")]
+    [Migration("20180116023259_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,6 +35,7 @@ namespace DVDManagement.Migrations
                         .IsConcurrencyToken();
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
@@ -51,7 +52,8 @@ namespace DVDManagement.Migrations
 
                     b.Property<string>("PasswordHash");
 
-                    b.Property<string>("PhoneNumber");
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(10);
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
@@ -104,13 +106,13 @@ namespace DVDManagement.Migrations
 
             modelBuilder.Entity("DVDManagement.Models.Dvd_recode", b =>
                 {
-                    b.Property<string>("Movie_code")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(10);
+                    b.Property<long>("Movie_code");
 
-                    b.Property<byte>("Type");
+                    b.Property<DateTime>("Rent_date");
 
-                    b.Property<string>("User_no")
+                    b.Property<byte>("Status");
+
+                    b.Property<long>("User_no")
                         .HasMaxLength(10);
 
                     b.HasKey("Movie_code");
@@ -120,20 +122,23 @@ namespace DVDManagement.Migrations
 
             modelBuilder.Entity("DVDManagement.Models.Transaction", b =>
                 {
-                    b.Property<string>("User_no")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(10);
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<int>("Add_amount");
+                    b.Property<int>("Amount");
 
-                    b.Property<string>("Movie_code")
-                        .HasMaxLength(10);
+                    b.Property<long?>("Movie_code");
+
+                    b.Property<string>("Movie_name");
 
                     b.Property<DateTime>("Trans_date");
 
                     b.Property<byte>("Type");
 
-                    b.HasKey("User_no");
+                    b.Property<long>("User_no")
+                        .HasMaxLength(10);
+
+                    b.HasKey("Id");
 
                     b.ToTable("Transaction");
                 });
@@ -274,6 +279,14 @@ namespace DVDManagement.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("DVDManagement.Models.Dvd_recode", b =>
+                {
+                    b.HasOne("DVDManagement.Models.Dvd_info")
+                        .WithOne("Dvd_recode")
+                        .HasForeignKey("DVDManagement.Models.Dvd_recode", "Movie_code")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
